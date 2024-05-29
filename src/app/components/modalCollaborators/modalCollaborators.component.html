@@ -1,0 +1,33 @@
+<form class="modal fade" [formGroup]="formEdit" (ngSubmit)="onSubmit()"  id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content p-2">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Nome</span>
+        <input type="text" formControlName="nome" class="form-control" aria-label="Nome" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">CPF</span>
+        <input type="text" minlength="14" maxlength="14" formControlName="cpf" class="form-control" placeholder="000.000.000-00" aria-label="CPF" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Admissão</span>
+        <input class="border p-2" formControlName="dataAdmissao" type="date" min="1990-09-08">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Remuneração</span>
+        <input type="text" formControlName="remuneracao" class="form-control" placeholder="2.000,00" aria-label="Remuneração" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Cargo</span>
+        <select class="form-select" formControlName="cargo" aria-label="Default select example">
+          <option value="1">1 - GERENTE</option>
+          <option value="2">2 - SUBORDINADO</option>
+        </select>
+      </div>
+      <div class="p-4">
+        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Editar</button>
+        <button type="button" class="btn btn-danger ms-2" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</form>

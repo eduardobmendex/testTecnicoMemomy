@@ -1,0 +1,47 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+Criar Colaborador</button>
+
+<!-- Modal -->
+<div class="modal w-100 fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-body">
+        <div class="modal-content p-2">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Nome</span>
+            <input type="text" formControlName="nome" class="form-control" aria-label="Nome" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">CPF</span>
+            <input type="text" minlength="14" maxlength="14" formControlName="cpf" class="form-control" placeholder="000.000.000-00" aria-label="CPF" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Admissão</span>
+            <input class="border p-2" formControlName="dataEmissao" type="date" min="1990-09-08">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Remuneração</span>
+            <input type="text" formControlName="remuneracao" class="form-control" placeholder="2.000,00" aria-label="Remuneração" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Cargo</span>
+            <select class="form-select" formControlName="cargo" aria-label="Default select example">
+              <option value="1">1 - GERENTE</option>
+              <option value="2">2 - SUBORDINADO</option>
+            </select>
+          </div>
+          <div class="p-4">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Criar</button>
+            <button type="button" class="btn btn-danger ms-2" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </form>
+       
+    </div>
+  </div>
+</div>

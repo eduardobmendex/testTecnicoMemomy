@@ -1,0 +1,279 @@
+<main class="container-fluid">
+  <nav class="navbar">
+    <div class="container-fluid bg-dark ">
+      <h1 class="w-100 text-light text-center   mt-4">
+        GERENCIADOR DE FUNCIONÁRIOS
+      </h1>
+    </div>
+  </nav>
+  <section class="w-100 h-100 d-flex align-items-center">
+    <div class="container">
+      <section class="mt-5">
+        <div class="container">
+          <div class="row align-items-start">
+            <div class="col d-flex justify-content-center p-4">
+
+              @if(selectedOption=='5') {
+                <input class="form-control me-4 w-50 p-2" minlength="1" maxlength="1" [(ngModel)]="idCargo" type="number"
+                  placeholder="Gerente" aria-label="Search" />
+                <div *ngIf="idCargo>2 || idCargo==0">
+                  <p class="text-danger">Cargo não encontrado.</p>
+                </div>
+                }
+                @if(selectedOption=='2') {
+                  <input [(ngModel)]="idColaborador" class="form-control me-4 w-50 p-2" minlength="1" maxlength="100"  type="text"
+                    placeholder="ex: Ana" aria-label="Search" />
+                   }
+                   @if(selectedOption=='3') {
+                    <input [(ngModel)]="nomeColaborador" class="form-control me-4 w-50 p-2" minlength="1" maxlength="100"  type="text"
+                      placeholder="ex: Ana" aria-label="Search" />
+                     }
+              @if(selectedOption=='1') {
+              <div class="w-25 flex-column">
+                <label class="btn btn-outline-primary" for="btnradio1">Todos os Colaboradores</label>
+                <p>Número da página:</p>
+                <input class="form-control me-4  p-2" minlength="1" maxlength="2" [(ngModel)]="pagina" type="number"
+                  placeholder="2" aria-label="Search" />
+                <p> Itens por página</p>
+                <input class="form-control me-4  p-2" minlength="1" maxlength="2" [(ngModel)]="itensPagina"
+                  type="number" placeholder="2" aria-label="Search" />
+              </div>
+              }
+              <div class="btn-group h-25 btn-group-sm" role="group" aria-label="Basic radio toggle button group">
+                <input [(ngModel)]="selectedOption" type="radio" class="btn-check" value="1" name="btnradio"
+                  id="btnradio1" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio1">Todos os Colaboradores</label>
+
+                <input [(ngModel)]="selectedOption" type="radio" class="btn-check" value="2" name="btnradio"
+                  id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Listar Colaborador</label>
+
+                <input [(ngModel)]="selectedOption" type="radio" class="btn-check" value="3" name="btnradio"
+                  id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Colaborador Por Nome</label>
+                <input [(ngModel)]="selectedOption" type="radio" class="btn-check" value="4" name="btnradio"
+                  id="btnradio4" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio4">Todos os cargos</label>
+
+                <input [(ngModel)]="selectedOption" type="radio" class="btn-check" value="5" name="btnradio"
+                  id="btnradio5" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio5">Lista um cargo</label>
+
+                <input [(ngModel)]="selectedOption" type="radio" class="btn-check" value="6" name="btnradio"
+                  id="btnradio6" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio6">All Colaboradores</label>
+               
+              </div>
+
+              <div class="btn-group h-25 btn-group-sm" role="group" aria-label="...">
+
+                <button *ngIf="selectedOption === '1'" type="button" class="btn  btn-primary ms-4 p-2"
+                  (click)='buscarPaginado()'>Pesquisar</button>
+                <button *ngIf="selectedOption === '2'" type="button" class="btn btn-primary ms-4 p-2"
+                  (click)="ColaboradorPorId()">Pesquisar</button>
+                <button *ngIf="selectedOption === '3'" type="button" class="btn btn-primary ms-4 p-2"
+                  (click)="ColaboradorPorNome()">Pesquisar</button>
+                <button *ngIf="selectedOption === '4'" type="button" class="btn btn-primary ms-4 p-2"
+                  (click)="listarTodosCargos()">Pesquisar</button>
+                <button *ngIf="selectedOption === '5'" type="button" class="btn btn-primary ms-4 p-2"
+                  (click)="listarCargo()">Pesquisar</button>
+              </div>
+              <div class="w-25 d-flex justify-content-center">
+              <app-modal-add-collaborators></app-modal-add-collaborators>
+            </div></div>
+          </div>
+        </div>
+      </section>
+      <div class=" d-flex justify-content-center w-100">
+        <div class="bg-dark rounded p-3 w-100">
+          @if(selectedOption=='6') {
+          <div>Logged-in</div>
+
+          <div class="text-light bg-dark rounded ">
+            <div class="d-flex justify-content-around header-row p-2">
+              <p class="column">Id</p>
+              <p class="column">Nome</p>
+              <p class="column">CPF</p>
+              <p class="column">Data de Admissão</p>
+              <p class="column">Remuneração</p>
+              <p class="column">Cargo</p>
+              <p class="column">Edição</p>
+            </div>
+            <div>
+              <div *ngFor="let item of listCollaborators; index as i"
+                class="d-flex  justify-content-between data-row p-2">
+                <p class="column">{{ item.id }}</p>
+                <p class="column">{{ item.nome }}</p>
+                <p class="column">{{ item.cpf }}</p>
+                <p class="column">{{ item.dataAdmissao }}</p>
+                <p class="column">{{ item.remuneracao | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                <p class="column">{{ item.cargo.id == 1 ? 'Gerente' : 'Subordinado' }}</p>
+                <div class="d-flex align-items-center bg-dark edit-column">
+                  <button type="button" class="btn btn-warning ms-4 p-2" (click)="editarItem(item)"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
+                  <button type="button" class="btn btn-danger ms-4 p-2" (click)="editarItem(item)">Excluir</button>
+
+
+                </div>
+
+              </div>
+              <app-modal-collaborators [selectedItem]="selectedItem" [item]="selectedItem"></app-modal-collaborators>
+
+            </div>
+          </div>
+          }
+          @if(selectedOption=='5' && cargoEncontrado!=undefined) {
+          <div class="text-light bg-dark rounded ">
+            <div class="d-flex justify-content-around header-row p-2">
+              <p class="column">Id</p>
+              <p class="column">Descrição</p>
+
+            </div>
+            <div>
+              <div class="d-flex justify-content-between data-row p-2">
+                <p class="column">{{ cargoEncontrado.id }}</p>
+                <p class="column">{{ cargoEncontrado.descricao }}</p>
+
+
+              </div>
+              <app-modal-collaborators [selectedItem]="selectedItem" [item]="selectedItem"></app-modal-collaborators>
+
+            </div>
+          </div>
+          }
+          @else if(selectedOption=='4' &&listAllCargos!=undefined){
+          <div class="text-light bg-dark rounded ">
+            <div class="d-flex justify-content-around header-row p-2">
+              <p class="column">Id</p>
+              <p class="column">Descrição</p>
+
+            </div>
+            <div>
+              <div class="d-flex justify-content-between data-row p-2" *ngFor="let item of listAllCargos">
+                <p class="column">{{ item.id }}</p>
+                <p class="column">{{ item.descricao }}</p>
+
+
+              </div>
+              <app-modal-collaborators [selectedItem]="selectedItem" [item]="selectedItem"></app-modal-collaborators>
+
+            </div>
+          </div>
+
+          }
+          @else if(selectedOption=='1' &&itensPaginados!=undefined){
+            <div>Logged-in</div>
+  
+            <div class="text-light bg-dark rounded ">
+              <div class="d-flex justify-content-around header-row p-2">
+                <p class="column">Id</p>
+                <p class="column">Nome</p>
+                <p class="column">CPF</p>
+                <p class="column">Data de Admissão</p>
+                <p class="column">Remuneração</p>
+                <p class="column">Cargo</p>
+                <p class="column">Edição</p>
+              </div>
+              <div>
+                <div *ngFor="let item of itensPaginados.data index as i"
+                  class="d-flex justify-content-between data-row p-2">
+                  <p class="column">{{ item.id }}</p>
+                  <p class="column">{{ item.nome }}</p>
+                  <p class="column">{{ item.cpf }}</p>
+                  <p class="column">{{ item.dataAdmissao }}</p>
+                  <p class="column">{{ item.remuneracao | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                  <p class="column">{{ item.cargo.id == 1 ? 'Gerente' : 'Subordinado' }}</p>
+                  <div class="d-flex align-items-center bg-dark edit-column">
+                    <button type="button" class="btn btn-warning ms-4 p-2" (click)="editarItem(item)"
+                      data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
+                    <button type="button" class="btn btn-danger ms-4 p-2">Excluir</button>
+  
+  
+                  </div>
+  
+                </div>
+                <app-modal-collaborators [selectedItem]="selectedItem" [item]="selectedItem"></app-modal-collaborators>
+  
+              </div>
+            </div>
+  
+            }
+            @else if(selectedOption=='3' &&colaboradorEncontrado!=undefined){
+              <div>Logged-in</div>
+    
+              <div class="text-light bg-dark rounded ">
+                <div class="d-flex justify-content-around header-row p-2">
+                  <p class="column">Id</p>
+                  <p class="column">Nome</p>
+                  <p class="column">CPF</p>
+                  <p class="column">Data de Admissão</p>
+                  <p class="column">Remuneração</p>
+                  <p class="column">Cargo</p>
+                  <p class="column">Edição</p>
+                </div>
+                <div>
+                  <div
+                    class="d-flex justify-content-between data-row p-2">
+                    <p class="column">{{ colaboradorEncontrado.id }}</p>
+                    <p class="column">{{ colaboradorEncontrado.nome }}</p>
+                    <p class="column">{{ colaboradorEncontrado.cpf }}</p>
+                    <p class="column">{{ colaboradorEncontrado.dataAdmissao }}</p>
+                    <p class="column">{{ colaboradorEncontrado.remuneracao | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                    <p class="column">{{ colaboradorEncontrado.cargo.id == 1 ? 'Gerente' : 'Subordinado' }}</p>
+                    <div class="d-flex align-items-center bg-dark edit-column">
+                      <button type="button" class="btn btn-warning ms-4 p-2" (click)="editarItem(colaboradorEncontrado)"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
+                      <button type="button" class="btn btn-danger ms-4 p-2" >Excluir</button>
+    
+    
+                    </div>
+    
+                  </div>
+                  <app-modal-collaborators [selectedItem]="selectedItem" [item]="selectedItem"></app-modal-collaborators>
+    
+                </div>
+              </div>
+    
+              }
+              @else if(selectedOption=='2' &&colaboradorIdEncontrado!=undefined){
+                <div>Logged-in</div>
+      
+                <div class="text-light bg-dark rounded ">
+                  <div class="d-flex justify-content-around header-row p-2">
+                    <p class="column">Id</p>
+                    <p class="column">Nome</p>
+                    <p class="column">CPF</p>
+                    <p class="column">Data de Admissão</p>
+                    <p class="column">Remuneração</p>
+                    <p class="column">Cargo</p>
+                    <p class="column">Edição</p>
+                  </div>
+                  <div>
+                    <div
+                      class="d-flex justify-content-between data-row p-2">
+                      <p class="column">{{ colaboradorIdEncontrado.id }}</p>
+                      <p class="column">{{ colaboradorIdEncontrado.nome }}</p>
+                      <p class="column">{{ colaboradorIdEncontrado.cpf }}</p>
+                      <p class="column">{{ colaboradorIdEncontrado.dataAdmissao }}</p>
+                      <p class="column">{{ colaboradorIdEncontrado.remuneracao | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+                      <p class="column">{{ colaboradorIdEncontrado.cargo.id == 1 ? 'Gerente' : 'Subordinado' }}</p>
+                      <div class="d-flex align-items-center bg-dark edit-column">
+                        <button type="button" class="btn btn-warning ms-4 p-2" (click)="editarItem(colaboradorIdEncontrado)"
+                          data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button>
+                        <button type="button" class="btn btn-danger ms-4 p-2">Excluir</button>
+      
+      
+                      </div>
+      
+                    </div>
+                    <app-modal-collaborators [selectedItem]="selectedItem" [item]="selectedItem"></app-modal-collaborators>
+      
+                  </div>
+                </div>
+      
+                }
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
